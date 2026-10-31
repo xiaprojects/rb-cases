@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "7c91828b-e264-4ff6-af01-04b3bc145672")
+	(paper "A4")
+	(title_block
+		(title "RB-06 aluminium box: board behind the display")
+		(date "2026-10-31")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-06/aluminium-waveshare-8")
+		(comment 2 "Free for personal use; commercial use requires an agreement, see LICENSE.md")
+	)
+	(lib_symbols)
+	(text "A 186 x 110 mm board inside the RB-06 box for the 8' Waveshare display, parallel to its back.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "b8dab705-d552-437f-b0b8-5b61779947ec")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

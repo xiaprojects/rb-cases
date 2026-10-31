@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "d7e3336f-d023-4474-a1ad-576bd9d38137")
+	(paper "A4")
+	(title_block
+		(title "RB-02 SixPack Box 80mm: module board")
+		(date "2026-10-31")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-02/sixpack-box-80mm-7088576")
+		(comment 2 "Free for personal use; commercial use requires an agreement, see LICENSE.md")
+	)
+	(lib_symbols)
+	(text "The module board of the SixPack Box rear: 45 x 32.3 mm on the bar and the top bosses, M2 screws.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "2e6a70d9-1e35-4151-ade5-822ab9fe7cbc")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "15009fcc-cc84-45fc-9f6e-52d5784f9e59")
+	(paper "A4")
+	(title_block
+		(title "Glass-cockpit rig left plate: backplane")
+		(date "2026-10-31")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-Cockpits/glass-cockpit-rig")
+		(comment 2 "Free for personal use; commercial use requires an agreement, see LICENSE.md")
+	)
+	(lib_symbols)
+	(text "A backplane behind the glass-cockpit rig left plate: same outline, cut-outs for the instruments and displays, holes on the panel screws.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "b8ee3352-eaa3-4a72-afc3-7999474e3595")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

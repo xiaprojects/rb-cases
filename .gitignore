@@ -1,0 +1,25 @@
+# Thingiverse ZIPs are unpacked with tools/import-thing.sh, never committed.
+*.zip
+
+# Slicer output is printer specific.
+*.gcode
+*.bgcode
+
+# FreeCAD backups.
+*.FCBak
+*.FCStd1
+
+# KiCad per-user settings, backups and caches.
+*.kicad_prl
+*-backups/
+fp-info-cache
+_autosave-*
+~*.lck
+
+# OS and editor clutter.
+.DS_Store
+Thumbs.db
+*~
+
+# Personal Claude Code settings.
+.claude/settings.local.json

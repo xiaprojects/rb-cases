@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "3d3d7b21-4d76-4781-93e2-cc665c34330e")
+	(paper "A4")
+	(title_block
+		(title "RB-02 Parrot GPS 80 mm: display board")
+		(date "2026-10-31")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-02/parrot-gps-sixpack-box-80mm-7208654")
+		(comment 2 "Free for personal use; commercial use requires an agreement, see LICENSE.md")
+	)
+	(lib_symbols)
+	(text "A board in place of the display module PCB inside the 80 mm shell; the shell has no screw bosses.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "708cc878-0e0b-48a3-adf6-64804a0f612d")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

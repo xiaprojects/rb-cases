@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "f6ee302f-cf43-40d5-8418-567adf10d0f4")
+	(paper "A4")
+	(title_block
+		(title "Glider panel: backplane")
+		(date "2026-10-31")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-Cockpits/glider-panel")
+		(comment 2 "Free for personal use; commercial use requires an agreement, see LICENSE.md")
+	)
+	(lib_symbols)
+	(text "A backplane behind the glider panel: same outline, cut-outs for the instruments and displays, holes on the panel screws.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "e5d8af6b-5ae4-4ed8-aac5-ccc85610c750")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

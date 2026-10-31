@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "beef5e5a-3933-4bec-8efa-0ea16b36c52a")
+	(paper "A4")
+	(title_block
+		(title "RB-02 GPS mount V2: GPS board on the shelf")
+		(date "2026-10-31")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-02/gps-mount-v2-7169108")
+		(comment 2 "CC BY-SA, derived from the GPS mount V2 by SeeCoryRun (see LICENSE.txt)")
+	)
+	(lib_symbols)
+	(text "A 45 x 30 mm board in place of the NEO-7M module on SeeCoryRun's GPS shelf, two M3 bolts.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "68b5a7fb-420e-4d2f-9db2-c2e45a28f140")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
