@@ -30,6 +30,7 @@ import uuid
 import pcbnew
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import display_case_layouts as DC  # noqa: E402
 from cockpit_layouts import BODY, COCKPITS, expand, parse_path  # noqa: E402
 from stl_slice import area, load, section, simplify  # noqa: E402
 
@@ -656,6 +657,95 @@ def rb06():
     return [t]
 
 
+def printed_ahrs(L):
+    """AHRS board for the AHRS plane of a printed case's carrier."""
+    d = L.ROOT
+    x0, x1, z0, z1 = L.AHRS
+    m = L.AHRS_MARGIN
+    # seen from behind, the component side: x = minus the case x, y = the case z
+    bx0, bx1, by0, by1 = -x1 + 1, -x0 - 1, z0 + m, z1 - m
+    # room up to the rear cover ribs, or to the converter and the rooms hanging from them
+    ceiling = L.Y_PLATE - L.RIB_H
+    for r in [L.CONVERTER] + list(L.ROOMS.values()):
+        if r and r[0] < x1 and r[1] > x0 and r[2] < z1 and r[3] > z0:
+            ceiling = min(ceiling, L.Y_PLATE - L.RIB_H - r[4])
+    room = ceiling - (L.Y_CARRIER_BACK + L.AHRS_RAISE) - 1.6
+    t = Template(d, f"{L.NAME}-ahrs-board", f"{L.DISPLAY_NAME} printed case: AHRS board",
+                 f"A {bx1 - bx0:g} x {by1 - by0:g} mm IMU board for the AHRS plane of the carrier, glued flat.")
+    t.rrect("Dwgs.User", -x1, z0, -x0, z1, 2.0)
+    # the carrier cut 0.5 mm in front of its back face, from the STL in its print pose
+    # (front face down: x = case x + w/2, y = h/2 - case z, z = depth behind the carrier front)
+    bw, bh = L.BODY[0], L.BODY[1]
+    wx0, wx1, wy0, wy1 = -x1 - 14, -x0 + 14, z0 - 14, z1 + 14
+    inside = lambda p: wx0 <= p[0] <= wx1 and wy0 <= p[1] <= wy1
+    stl = f"{d}/files/{L.NAME}-carrier{'-left' if L.SPLIT.get('Carrier') else ''}.stl"
+    for loop in section(load(stl), 2, L.CARRIER_T - 0.5):
+        pts = [(bw / 2 - x, bh / 2 - y) for x, y in simplify(loop)]
+        segs = [("L", a, b) for a, b in zip(pts, pts[1:] + pts[:1]) if inside(a) and inside(b)]
+        if segs:
+            t.shape("Dwgs.User", "path", segs)
+    t.text("Dwgs.User", (bx0 + bx1) / 2, z1 - m / 2, "UP mark", 1.5)
+    t.text("Dwgs.User", (bx0 + bx1) / 2, z0 + m / 2, "AHRS mark", 1.5)
+    t.rrect("Edge.Cuts", bx0, by0, bx1, by1, 1.0)
+    fits = "a 25.4 mm breakout fits too" if min(bx1 - bx0, by1 - by0) >= 25.4 else "a 25.4 mm breakout does not"
+    t.notes = [
+        "Seen from behind, the component side; up is up on the instrument, as the arrow on the plane.",
+        f"Outline = the AHRS plane between its engraved marks, 1 mm inside its sides: {fits}.",
+        "No mounting holes: glue the board flat with an epoxy rated above 100 °C, edges square to the arrow.",
+        f"Parts up to {room:.0f} mm tall clear the rear cover" + (" and the 5 V converter above the plane."
+                                                                 if ceiling < L.Y_PLATE - L.RIB_H else "."),
+        "Wire it to the Pi GPIO, I2C bus 1: 3.3 V pin 1, SDA pin 3, SCL pin 5, GND pin 6. The RB software finds "
+        "ICM-20948 and MPU-9250 family IMUs at 0x68 and BMP280/388/390 baros at 0x76 or 0x77.",
+        "The plane is parallel to the panel; set the sensor orientation in the AHRS calibration of the RB software.",
+        "Dwgs.User shows the carrier cut 0.5 mm in front of its back face, round the AHRS plane.",
+    ]
+    return t
+
+
+def printed_gpio(L):
+    """A board on the GPIO header of an ESP32 display, inside the rear cover."""
+    d = L.ROOT
+    pins = L.GPIO_PINS
+    socket = 8.5                                   # a 2.54 mm socket on the board, 8.5 mm tall
+    header = L.Y_GLASS + L.DISPLAY_PARTS["GPIO header with plug"][4] - 9.5  # top of the header pins
+    front = header + socket - 3.0                  # the pins go 3 mm into the socket
+    room = L.Y_PLATE - L.RIB_H - (front + 1.6)
+    # seen from behind, the component side: x = minus the case x, y = the case z
+    x0, x1, z0, z1 = -24.0, 24.0, -26.0, -2.0
+    t = Template(d, f"{L.NAME}-gpio-board", f"{L.DISPLAY_NAME} printed case: GPIO board",
+                 f"A {x1 - x0:g} x {z1 - z0:g} mm board on the 2 x 17 GPIO header, inside the rear cover.")
+    for x, z in pins:
+        t.circle("Dwgs.User", -x, z, 0.5)
+    xs, zs = [-x for x, _ in pins], [z for _, z in pins]
+    t.rrect("Dwgs.User", min(xs) - 1.27, min(zs) - 1.27, max(xs) + 1.27, max(zs) + 1.27, 0)
+    t.text("Dwgs.User", 0, max(zs) + 3, "2 x 17 socket, 2.54 mm, on the front side", 1.5)
+    bw, bh = L.BODY[0], L.BODY[1]
+    t.rrect("Dwgs.User", -(bw / 2 - L.WALL), -(bh / 2 - L.WALL), bw / 2 - L.WALL, bh / 2 - L.WALL, L.BODY[2] - L.WALL)
+    for x, z in L.COVER_SCREWS:
+        t.circle("Dwgs.User", -x, z, L.COLUMN[0] / 2)
+    t.rrect("Edge.Cuts", x0, z0, x1, z1, 1.0)
+    t.notes = [
+        "Seen from behind, the component side; up is up on the instrument.",
+        "Put a 2 x 17, 2.54 mm socket on the front side, on the pins drawn on Dwgs.User: the board plugs onto "
+        "the display's GPIO header through the carrier.",
+        f"With an 8.5 mm socket, parts up to {room:.0f} mm tall clear the rear cover ribs.",
+        "Outline = the room inside the rear cover below its back holes, clear of the screw columns "
+        "(drawn on Dwgs.User with the inside of the cover).",
+        "No mounting holes: the socket holds the board, and the rear cover keeps it from backing off.",
+    ]
+    return t
+
+
+def printed_cases():
+    out = []
+    for L in DC.CASES.values():
+        if L.KIND == "bezel" and L.AHRS:
+            out.append(printed_ahrs(L))
+        if getattr(L, "GPIO_PINS", None):
+            out.append(printed_gpio(L))
+    return out
+
+
 def round_rect_poly(x0, y0, x1, y1, r, n=6):
     pts = []
     for cx, cy, a0 in ((x1 - r, y0 + r, -90), (x1 - r, y1 - r, 0), (x0 + r, y1 - r, 90), (x0 + r, y0 + r, 180)):
@@ -729,7 +819,8 @@ def cockpit(slug, spec):
     return out
 
 
-DESIGNS = [rb01, rb02_sixpack, rb02_front_install, rb02_gps_mount, rb02_parrot, rb02_compact, rb03, rb06] + [
+DESIGNS = [rb01, rb02_sixpack, rb02_front_install, rb02_gps_mount, rb02_parrot, rb02_compact, rb03, rb06,
+           printed_cases] + [
     (lambda s=slug, sp=spec: cockpit(s, sp)) for slug, spec in COCKPITS.items()]
 
 

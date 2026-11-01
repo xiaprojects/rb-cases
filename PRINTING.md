@@ -39,6 +39,43 @@ flame-retardant grade where your filament maker offers one.
 - At least 4 perimeters and 40 % infill for cases and mounts, at the
   temperatures of the filament datasheet.
 
+## Print tips
+
+- **Orientation.** The printed display cases (the RB-06
+  [printed cases](RB-06/printed-case-waveshare-8/), and the RB-02
+  [2.41"](RB-02/printed-case-amoled-2-41/) and
+  [round 1.75"](RB-02/round-case-amoled-1-75/) cases) and the RB-Cockpits
+  tiles come placed on the bed the way they print best: print them as
+  exported, without supports. For the other cases, put the largest flat face
+  on the bed.
+- **Large flat parts warp.** PC and nylon shrink as they cool, and the RB-06
+  8" bezel is 237 × 162 mm; the 13.3" case comes in pieces up to 222 × 226 mm.
+  - Print on textured PEI or on a layer of glue stick: PC can stick to smooth
+    PEI hard enough to tear it.
+  - Add a 5–8 mm brim.
+  - Keep the part cooling fan low, 10–30 %.
+  - Let the part cool down inside the closed printer before you take it off.
+- **Honeycomb walls.** The walls of the printed cases' honeycomb are 1.6 mm: with a
+  0.4 mm nozzle and 0.4 mm lines they are exactly 4 perimeters, with no thin
+  gap fill. Print 0.2 mm layers. Keep the 40 % infill for the solid areas.
+- **Flat AHRS plane.** Turn on ironing for top surfaces, or at least for the
+  AHRS plane, so the sensor board sits flat on it.
+- **Check the size before the inserts.** Fit the display in the bezel pocket
+  and the screws in their holes on the first print. Annealing shrinks the part:
+  anneal and measure a test piece first, scale the print by its shrinkage, and
+  press the inserts in after annealing.
+- **Heat-set inserts, not printed threads.** Every screw of a part that flies
+  goes into a brass insert. The hole sizes are in each design README. Use an
+  iron with an insert tip at about the filament's printing temperature. Press
+  straight and slowly, stop flush with the surface, and hold the iron flat for
+  a few seconds. Let the insert cool before you load it.
+- **No liquid threadlocker on polycarbonate.** Anaerobic threadlockers make PC
+  crack under stress. Lock the screws with nylon-insert nuts or a nylon patch
+  instead.
+- **Tape and glue fly too.** Foam tape, glue and cable ties inside the case
+  see the same 100 °C. Use silicone foam tape, heat-stabilised cable ties
+  rated 105 °C, and epoxy rated above 100 °C for glued sensors.
+
 ## Test before flying
 
 Put one printed part, for example a front ring or a bezel, in an oven at

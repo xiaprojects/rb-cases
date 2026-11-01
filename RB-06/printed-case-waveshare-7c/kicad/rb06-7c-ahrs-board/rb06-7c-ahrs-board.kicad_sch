@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "78fa112c-1e9b-494b-a1d8-3f0bc41b2c45")
+	(paper "A4")
+	(title_block
+		(title "Waveshare 7inch HDMI LCD (C) printed case: AHRS board")
+		(date "2026-11-01")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-06/printed-case-waveshare-7c")
+		(comment 2 "Free for personal use; commercial use requires an agreement, see LICENSE.md")
+	)
+	(lib_symbols)
+	(text "A 36 x 27 mm IMU board for the AHRS plane of the carrier, glued flat.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "bd595b72-fc71-4288-a8f1-1e2513492183")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
