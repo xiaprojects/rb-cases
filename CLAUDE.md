@@ -18,8 +18,9 @@ RB-xx/                        one folder per product; README.md lists its design
     kicad/<project>/          generated KiCad board template (pro, pcb, sch, meta/info.html)
   <slug>/                     a design not on Thingiverse: same layout
 RB-Cockpits/<cockpit>/        generated simulator panels: STL tiles, DXF, FCStd, layout SVG
-RB-06/printed-case-*/, RB-02/printed-case-*/, RB-02/round-case-*/
+RB-06/printed-case-*/, RB-02/printed-case-*/, RB-02/round-case-*/, RB-01/glasscockpit-*/
                               generated display cases: STL parts, FCStd, cut-out DXF, PNG views
+RB-01/f-16-sidestick-grip/    third-party joystick grip: FCStd, STL parts and views generated from its STEP
 README.md                     public index: products table and designs table
 LICENSE.md                    license of every RB-Avionics design
 tools/import-thing.sh         import or update a Thingiverse ZIP
@@ -28,6 +29,8 @@ tools/cockpit_panels.py       FreeCAD generator of the RB-Cockpits panels
 tools/display_case_layouts.py display case dimensions, one Case per folder, shared by both generators
 tools/display_cases.py        FreeCAD generator of the display cases
 tools/step_check.py           checks a display case against the display's STEP model
+tools/joystick_grip.py        FreeCAD generator of the F-16 sidestick grip
+tools/freecad_render.py       z-buffer PNG renderer shared by the FreeCAD generators
 tools/kicad_templates.py      KiCad generator of every design's board template
 tools/stl_slice.py            STL section helper used by the KiCad generator
 tools/check.sh                layout and file checks, run before committing
@@ -41,7 +44,8 @@ tools/check.sh                layout and file checks, run before committing
 - Never edit STL or DXF content by hand. Case files are exports from CAD tools
   that are not in this repo: a fix means a new export from the designer.
   RB-Cockpits files are generated: change `tools/cockpit_panels.py` and rerun it.
-  So are the display cases: change `tools/display_case*.py` and rerun.
+  So are the display cases: change `tools/display_case*.py` and rerun. So is the
+  F-16 grip, apart from its two source files: change `tools/joystick_grip.py`.
 - Thingiverse `README.txt` is not kept: its content lives in README.md, and
   `tools/check.sh` fails if one reappears.
 - Licenses: RB-Avionics designs (XIAPROJECTS, Sandro and the RB-Avionics team,
@@ -50,6 +54,9 @@ tools/check.sh                layout and file checks, run before committing
   author keeps its own `LICENSE.txt` and License row: never relicense it.
   `RB-02/gps-mount-v2-7169108` is by SeeCoryRun under CC BY-SA, which cannot be
   narrowed; keep its author credit everywhere it is listed.
+  `RB-01/f-16-sidestick-grip` is by Spock under CC BY-NC-SA 4.0: same rule, and it
+  is non-commercial, so RB-Avionics cannot offer a commercial agreement for it and
+  it must stay out of paid kits and RB-07.
 - Parts installed in an aircraft must withstand 100 °C in cruise on long flights.
   `PRINTING.md` holds the disclaimer, materials table and oven test; every
   printable design README links it (the templates in both tools add the note,
@@ -101,8 +108,8 @@ Change or rebuild a cockpit panel:
    Seams must not leave slivers along cut-outs.
 4. `tools/check.sh`.
 
-Change or rebuild a display case (the RB-06 printed cases, the RB-02 2.41" case
-and the round 1.75" case):
+Change or rebuild a display case (the RB-06 printed cases, the RB-02 2.41" case,
+the round 1.75" case and the RB-01 GlassCockpit 8" unit and remote round display):
 
 1. Edit the case in `tools/display_case_layouts.py` (display, Pi, AHRS plane,
    carrier openings and recesses, holes) or the shapes in `tools/display_cases.py`.
@@ -119,6 +126,14 @@ and the round 1.75" case):
    STEP model: `RB_ONLY=<folder> STEP=<model.stp> freecad.cmd tools/step_check.py`.
    The models are Waveshare's: they stay out of the repo, under `$HOME`.
 
+Rebuild the F-16 sidestick grip (about a minute):
+
+1. `freecad.cmd tools/joystick_grip.py` from the repo root. `files/Viper_Stick_assem.STEP`
+   and `files/Viper_Left.STL` are the author's and stay as published; everything else
+   in `files/` and `images/` is generated. The left shell prints from the author's STL
+   because one STEP face cannot be meshed: see the script's docstring.
+2. Look at the three `images/grip-*.png`, then `tools/check.sh`.
+
 Rebuild the KiCad board templates (after changing a case, a cockpit layout or
 the script):
 
@@ -128,6 +143,12 @@ the script):
    `kicad-cli pcb drc` and draws `images/kicad-<project>.svg` from the saved board.
 2. Look at the changed previews; a cockpit layout change needs both generators.
 3. `tools/check.sh`.
+
+In FreeCAD's command mode a script argument is imported as a module, so a script
+named like a standard module (`socket.py`) silently runs nothing; the snap remaps
+`~`, so use absolute paths. On imported STEP solids, `Shape.BoundBox` includes spline
+control points and overstates curved parts by tens of mm, and `Shape.Volume` can be
+4 % off: measure the mesh instead.
 
 In `pcbnew`'s Python API, `GetLayerID()` wants display names (`User.Drawings`), so
 the script uses the layer constants, and there is no `PAGE_INFO`: the paper size
@@ -166,6 +187,10 @@ both indexes, every file and image referenced from its design README, every
   The driver board has 4 mm SMD nuts on the Pi pattern (58 × 49) and on 100 × 65,
   but it is held to the LCD only by foam, so the printed case carries the Pi on the
   rear cover instead, and so do the other RB-06 cases.
+- `8DP-CAPLCD.stp`'s touch panel solid has a chip block at x -72.9 to -67.4, z 15.7 to 22.2,
+  7.46 mm behind the glass front, 1.72 mm proud of the LCD back. The RB-01 GlassCockpit
+  carrier has a pocket for it. The RB-06 8" carrier does not: it fails `step_check.py` by
+  40 mm3 and needs the same pocket and a rebuild.
 - Waveshare 3D models used for the other cases: 6.25inch 720x1560 LCD, 5.5inch HDMI
   AMOLED, 7inch HDMI LCD (C) and 7.9inch HDMI LCD (the last two are single merged
   solids), the 70H-1024600 CT inside Waveshare's own printed shell, and the
@@ -189,6 +214,19 @@ both indexes, every file and image referenced from its design README, every
 - Displays are Waveshare and Wisecoco. Boards: ESP32 (RB-02, including the 1.75"
   and 2.41" AMOLED boards with their own ESP32-S3; rb-esp supports the 1.75"),
   Raspberry Pi 5 (RB-01, RB-06), Raspberry Pi Zero 2W (RB-03 box).
+- RB-01 GlassCockpit: the Waveshare PCIe TO USB 3.2 Gen1 HAT+ is 85 x 56.5 mm with the Pi's
+  holes (resellers say 49 mm). Its 40-pin socket is blind, on the underside, so nothing can
+  stack above it: the EMS HAT takes the GPIO and the USB HAT goes under the Pi, off the GPIO,
+  on its PCIe ribbon and USB-C, which its STEP model omits. That needs `dtparam=pciex1`, and
+  the stack stands component faces to the front (`STACK` in the layouts mirrors `pi_xz`).
+  The list of USB devices is 11 for 8 ports: a four-port hub, no spare.
+- Round RB-01 display: Wisecoco 2.8" with an HDMI driver board, 48 x 48 mm, holes 42 x 44.9
+  mm, measured on the RB01.05 sled; sockets from `../www.rbavionics.com/js/rb-01-3d.js`,
+  which also has the sizes of the converter, hub, sticks and GPS. Its flex is 18 mm wide:
+  the driver board must stay square to it, so parallel to the display or on the sled.
+- RB-01 reads a stick or keypad as a keyboard: `main/keypad.go` in `../roastbeef` opens
+  only a device whose name contains `keyboard`, and it stops for good when that device
+  disconnects. The key map is its `web/settings/keypad.json`.
 - RB-01 part names are Italian; the glossary is in
   `RB-01/3d-synthview-7162277/README.md`.
 

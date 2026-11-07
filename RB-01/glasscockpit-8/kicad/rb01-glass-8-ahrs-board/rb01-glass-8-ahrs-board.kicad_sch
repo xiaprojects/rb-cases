@@ -1,0 +1,33 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "62815528-98f2-4674-b16b-edba2e794e00")
+	(paper "A4")
+	(title_block
+		(title "Waveshare 8DP-CAPLCD printed case: AHRS board")
+		(date "2026-11-07")
+		(rev "1")
+		(company "RB-Avionics")
+		(comment 1 "Board template for RB-01/glasscockpit-8")
+		(comment 2 "Free for personal use; commercial use requires an agreement, see LICENSE.md")
+	)
+	(lib_symbols)
+	(text "A 36 x 27 mm IMU board for the AHRS plane of the carrier, glued flat.\n\nAdd your circuit here, then Tools > Update PCB from Schematic:\nthe board outline and the mounting holes are already in the PCB."
+		(exclude_from_sim no)
+		(at 25.4 38.1 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left top)
+		)
+		(uuid "f2497a2d-6369-4bb5-8f7c-58efc3e6c42a")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
